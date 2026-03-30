@@ -187,11 +187,11 @@ export default function BirthdaySurprise() {
           <Icon size={showGift ? 30 : 24} />
         </motion.div>
       ))}
-      {!showGift &&
+      {phase === 1 &&
         starField.map((star) => (
           <motion.div
             key={star.id}
-            className="fixed z-0"
+            className="pointer-events-none fixed z-5"
             style={{ top: `${star.top}%`, left: `${star.left}%` }}
             animate={{ opacity: [0.2, 0.95, 0.2], scale: [0.75, 1.2, 0.75] }}
             transition={{ duration: star.duration, repeat: Infinity }}
@@ -206,21 +206,31 @@ export default function BirthdaySurprise() {
           <motion.section
             key="landing"
             exit={{ opacity: 0, scale: 0.8 }}
-            className="relative z-10 h-screen flex items-center justify-center p-6"
+            className="relative z-10 h-screen flex items-center justify-center p-6 overflow-hidden"
           >
-            <div className="bg-white/28 backdrop-blur-2xl border border-white/70 p-12 rounded-[40px] shadow-2xl text-center max-w-xl">
+            <div className="absolute inset-0 -z-10">
+              <Image
+                src="/image.png"
+                alt="Background"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-linear-to-br from-green-400/28 via-purple-500/24 to-[#c4b5fd]/30" />
+            </div>
+            <div className="bg-white/20 backdrop-blur-3xl border border-white/80 p-14 rounded-[50px] shadow-[0_25px_50px_rgba(0,0,0,0.3)] text-center max-w-xl relative z-10">
               <Gift
                 size={64}
-                className="text-rose-500 mx-auto mb-6 animate-bounce"
+                className="text-rose-400 mx-auto mb-8 animate-bounce drop-shadow-lg"
               />
               <h1
-                className={`${heroFont.className} text-5xl md:text-6xl text-white drop-shadow-lg mb-5`}
+                className={`${heroFont.className} mb-8 text-5xl text-white drop-shadow-[0_5px_14px_rgba(0,0,0,0.45)] md:text-7xl`}
               >
                 HAPPY BIRTHDAY FELICITY
               </h1>
               <button
                 onClick={revealGift}
-                className={`${playfulFont.className} px-9 py-4 bg-gradient-to-r from-fuchsia-500 to-rose-500 text-white rounded-full font-bold text-xl shadow-xl hover:scale-105 transition-transform`}
+                className={`${playfulFont.className} px-12 py-4 bg-linear-to-r from-fuchsia-500 via-pink-500 to-rose-500 text-white rounded-full font-bold text-xl shadow-[0_10px_30px_rgba(224,70,167,0.6)] hover:shadow-[0_15px_40px_rgba(224,70,167,0.8)] hover:scale-110 active:scale-95 transition-all duration-200`}
               >
                 Open Gift ✨
               </button>
@@ -256,28 +266,32 @@ export default function BirthdaySurprise() {
             key="final"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="px-4 pb-10 pt-20 md:px-10 min-h-screen flex items-center justify-center"
+            className="px-4 py-8 md:px-10 min-h-screen flex items-center justify-center"
           >
             <button
               onClick={toggleMusic}
-              className="fixed top-6 right-6 z-50 p-4 bg-white/45 backdrop-blur-xl border border-white/60 rounded-full shadow-lg"
+              className="fixed top-6 right-6 z-50 p-4 bg-white/30 backdrop-blur-xl border border-white/70 rounded-full shadow-[0_8px_24px_rgba(0,0,0,0.15)] hover:bg-white/40 hover:shadow-[0_12px_32px_rgba(0,0,0,0.25)] active:scale-90 transition-all duration-200"
             >
-              {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+              {isPlaying ? (
+                <Pause size={24} className="text-slate-700" />
+              ) : (
+                <Play size={24} className="text-slate-700" />
+              )}
             </button>
 
-            <div className="mx-auto w-full max-w-5xl rounded-4xl bg-gradient-to-br from-[#f93dff9c] via-[#6BCB77] to-[#E2B6FF] p-1 shadow-2xl">
+            <div className="mx-auto w-full max-w-5xl rounded-4xl bg-linear-to-br from-[#f93dff9c] via-[#6BCB77] to-[#E2B6FF] p-1.5 shadow-[0_30px_60px_rgba(0,0,0,0.2)]">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
-                className="bg-white/30 backdrop-blur-2xl p-8 md:p-12 rounded-[calc(2rem+4px)] border border-white/60 grid md:grid-cols-2 gap-10 items-center"
+                className="bg-white/25 backdrop-blur-3xl p-10 md:p-16 rounded-[calc(2rem+4px)] border border-white/70 grid md:grid-cols-2 gap-12 items-center"
               >
                 {/* Solid Birthday Photo Frame */}
                 <motion.div
                   initial={{ x: -50, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.5, duration: 0.8 }}
-                  className="relative aspect-[4/5] w-full rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl ring-1 ring-black/5"
+                  className="relative aspect-4/5 w-full rounded-3xl overflow-hidden border-[7px] border-white shadow-[0_25px_50px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.3)]"
                 >
                   <Image
                     src="/felz.jpg"
@@ -286,6 +300,7 @@ export default function BirthdaySurprise() {
                     className="object-cover"
                     priority
                   />
+                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10" />
                 </motion.div>
 
                 {/* Solid Birthday Wish Side */}
@@ -293,22 +308,34 @@ export default function BirthdaySurprise() {
                   initial={{ x: 50, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.7, duration: 0.8 }}
-                  className="text-left space-y-6"
+                  className="text-left space-y-7"
                 >
-                  <div className="flex items-center gap-2">
-                    <Heart className="text-rose-500 fill-rose-500" size={32} />
-                    <Sparkles className="text-amber-400" size={24} />
+                  <div className="flex items-center gap-3">
+                    <Heart
+                      className="text-rose-500 fill-rose-500 drop-shadow-md"
+                      size={36}
+                    />
+                    <Sparkles
+                      className="text-amber-400 drop-shadow-md"
+                      size={28}
+                    />
                   </div>
 
-                  <h2
-                    className={`${wishTitleFont.className} text-5xl md:text-6xl text-slate-800 leading-tight`}
-                  >
-                    To the One & Only <br />{" "}
-                    <span className="text-rose-600">Felicity</span>
-                  </h2>
+                  <div>
+                    <h2
+                      className={`${wishTitleFont.className} text-6xl md:text-7xl text-slate-800 leading-tight drop-shadow-sm`}
+                    >
+                      To the One & Only
+                    </h2>
+                    <h2
+                      className={`${wishTitleFont.className} text-6xl md:text-7xl text-rose-600 leading-tight drop-shadow-sm`}
+                    >
+                      Felicity
+                    </h2>
+                  </div>
 
                   <div
-                    className={`${wishBodyFont.className} space-y-4 text-xl text-slate-700 leading-relaxed font-medium`}
+                    className={`${wishBodyFont.className} space-y-5 text-lg md:text-xl text-slate-700 leading-relaxed font-medium`}
                   >
                     <p>
                       Happy Birthday Felicity! Watching you grow has been such a
